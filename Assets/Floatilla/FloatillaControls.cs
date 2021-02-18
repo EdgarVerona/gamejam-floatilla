@@ -19,6 +19,8 @@ public class FloatillaControls : MonoBehaviour
 	private Floatilla _floatilla;
 
 	private int _rotateDirection = 0;
+	private int _thrustX = 0;
+	private int _thrustY = 0;
 
 	public void Start()
 	{
@@ -28,33 +30,35 @@ public class FloatillaControls : MonoBehaviour
 	public void OnMove(InputAction.CallbackContext context)
 	{
 		var moveDirection = context.ReadValue<Vector2>();
-		bool moved = false;
 
 		if (moveDirection.x > Mathf.Epsilon)
 		{
 			print($"Moving right! ({moveDirection.x})");
-			moved = true;
+			_thrustX = 1;
 		}
 		else if (moveDirection.x < -Mathf.Epsilon)
 		{
 			print($"Moving left! ({moveDirection.x})");
-			moved = true;
+			_thrustX = -1;
+		}
+		else
+		{
+			_thrustX = 0;
 		}
 
 		if (moveDirection.y > Mathf.Epsilon)
 		{
 			print($"Moving up! ({moveDirection.y})");
-			moved = true;
+			_thrustY = 1;
 		}
 		else if (moveDirection.y < -Mathf.Epsilon)
 		{
 			print($"Moving down! ({moveDirection.y})");
-			moved = true;
+			_thrustY = -1;
 		}
-
-		if (!moved)
+		else
 		{
-			print("Not moving!");
+			_thrustY = 0;
 		}
 	}
 
@@ -116,10 +120,36 @@ public class FloatillaControls : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+	{
+		RotateShip();
+		ThrustShip();
+	}
+
+	private void ThrustShip()
+	{
+		float translateX = 0.0f;
+		float translateY = 0.0f;
+		if (_thrustX != 0)
+		{
+			float thrustPerSecond = _floatilla.GetEngineThrust(_thrustX > 0 ? Direction.Right : Direction.Left);
+
+			translateX = thrustPerSecond * _thrustX *Time.deltaTime;
+		}
+		if (_thrustY != 0)
+		{
+			float thrustPerSecond = _floatilla.GetEngineThrust(_thrustY > 0 ? Direction.Up : Direction.Down);
+
+			translateY = thrustPerSecond * _thrustY * Time.deltaTime;
+		}
+
+		this.transform.Translate(translateX, 0.0f, translateY, Space.Self);
+	}
+
+	private void RotateShip()
+	{
 		float rotateAngle = 0.0f;
 
-        switch (_rotateDirection)
+		switch (_rotateDirection)
 		{
 			case 0:
 				break;
@@ -129,7 +159,7 @@ public class FloatillaControls : MonoBehaviour
 		}
 
 		this.transform.RotateAround(_floatilla.GetWorldMidpoint(), Vector3.up, rotateAngle);
-    }
+	}
 
 	private float CalculateRotationAngleMagnitude(float deltaTime)
 	{

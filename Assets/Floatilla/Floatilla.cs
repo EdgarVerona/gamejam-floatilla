@@ -13,10 +13,10 @@ public class Floatilla : MonoBehaviour
         return 3;
 	}
 
-    public int GetEngineCount(Direction direction)
+    public float GetEngineThrust(Direction direction)
     {
-        //$$TODO - Replace with actual engine count
-        return 1;
+        //$$TODO - Replace with actual engine thrust
+        return 10.0f;
     }
 
     public Vector3 GetWorldMidpoint()
