@@ -45,29 +45,32 @@ public class HullGridEditor : MonoBehaviour
 	{
 		Hull hull = this.GetComponent<Hull>();
 
-		var bounds = MathUtilities.GetMaxBounds(this.gameObject);
-
+		Gizmos.matrix = this.transform.localToWorldMatrix;
 		Gizmos.color = Color.blue;
-		DrawGizmoForDevice(bounds, hull.TopDevice, Vector3.forward);
-		DrawGizmoForDevice(bounds, hull.BottomDevice, Vector3.back);
-		DrawGizmoForDevice(bounds, hull.LeftDevice, Vector3.left);
-		DrawGizmoForDevice(bounds, hull.RightDevice, Vector3.right);
+		DrawGizmoForDevice(hull.TopDevice, Vector3.forward);
+		DrawGizmoForDevice(hull.BottomDevice, Vector3.back);
+		DrawGizmoForDevice(hull.LeftDevice, Vector3.left);
+		DrawGizmoForDevice(hull.RightDevice, Vector3.right);
 	}
 
-	private void DrawGizmoForDevice(Bounds bounds, GameObject device, Vector3 direction)
+	private void DrawGizmoForDevice(GameObject device, Vector3 direction)
 	{
 		if (device != null)
 		{
-			Vector3 destination = GetGizmoDestVector(bounds, direction);
+			Vector3 destination = GetGizmoDestVector(direction);
 			
-			Gizmos.DrawLine(bounds.center + new Vector3(0.0f, bounds.extents.y, 0.0f), destination);
-			Gizmos.DrawIcon(destination, device.name + ".png", false);
+			Gizmos.DrawLine(
+				new Vector3(0.0f, 0.55f, 0.0f), destination);
+
+			Gizmos.DrawIcon(this.transform.localToWorldMatrix.MultiplyPoint(destination), device.name + ".png", false);
 		}
 	}
 
-	private Vector3 GetGizmoDestVector(Bounds bounds, Vector3 direction)
+	private Vector3 GetGizmoDestVector(Vector3 direction)
 	{
-		return bounds.center + (direction * bounds.extents.z * 0.75f) + new Vector3(0.0f, bounds.extents.y * 1.1f, 0.0f);
+		
+		return (direction * 0.45f) 
+			+ new Vector3(0.0f, 0.55f, 0.0f);
 	}
 
 	private void AffixToGrid()
