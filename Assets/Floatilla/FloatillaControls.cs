@@ -1,20 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Ship))]
-public class ShipControls : MonoBehaviour
+[RequireComponent(typeof(Floatilla))]
+public class FloatillaControls : MonoBehaviour
 {
 	[SerializeField]
-	float MaxRadiansPerSecondRotation = 0.78f; // Default 1/4 circle per second at max turn speed
+	float MaxDegreesPerSecondRotation = 90.0f; // Default 1/4 circle per second at max turn speed
 
 	[SerializeField]
-	float MinRadiansPerSecondRotation = 0.10f; // No matter how big the floatilla gets, it cannot rotate slower than this.
+	float MinDegreesPerSecondRotation = 10.0f; // No matter how big the floatilla gets, it cannot rotate slower than this.
 
 	[SerializeField]
-	float TurnReductionPerHullPiece = 0.05f; // For each hull piece in the floatilla, reduce max speed by this many radians.
+	float TurnReductionPerHullPiece = 5.0f; // For each hull piece in the floatilla, reduce max speed by this many degrees.
 
+	private Floatilla _floatilla;
+
+	private int _rotateDirection = 0;
+
+	public void Start()
+	{
+		_floatilla = GetComponent<Floatilla>();
+	}
 
 	public void OnMove(InputAction.CallbackContext context)
 	{
@@ -66,10 +75,15 @@ public class ShipControls : MonoBehaviour
 		if (context.started)
 		{
 			print("Rotating Left!");
+			_rotateDirection = -1;
 		}
 		else if (context.canceled)
 		{
 			print("Rotating Left stopped!");
+			if (_rotateDirection == -1)
+			{
+				_rotateDirection = 0;
+			}
 		}
 	}
 
@@ -78,10 +92,15 @@ public class ShipControls : MonoBehaviour
 		if (context.started)
 		{
 			print("Rotating Right!");
+			_rotateDirection = 1;
 		}
 		else if (context.canceled)
 		{
 			print("Rotating Right stopped!");
+			if (_rotateDirection == 1)
+			{
+				_rotateDirection = 0;
+			}
 		}
 	}
 
@@ -95,15 +114,29 @@ public class ShipControls : MonoBehaviour
 		print("Boat Management Screen");
 	}
 
-	// Start is called before the first frame update
-	void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
-        
+		float rotateAngle = 0.0f;
+
+        switch (_rotateDirection)
+		{
+			case 0:
+				break;
+			default:
+				rotateAngle = CalculateRotationAngleMagnitude(Time.deltaTime) * _rotateDirection;
+				break;
+		}
+
+		this.transform.RotateAround(_floatilla.GetWorldMidpoint(), Vector3.up, rotateAngle);
     }
+
+	private float CalculateRotationAngleMagnitude(float deltaTime)
+	{
+		float turnsPerSecond = Math.Max(
+			this.MaxDegreesPerSecondRotation - (this.TurnReductionPerHullPiece * _floatilla.GetHullCount()),
+			this.MinDegreesPerSecondRotation);
+
+		return turnsPerSecond * deltaTime;
+	}
 }
