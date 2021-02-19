@@ -20,6 +20,11 @@ public class Floatilla : MonoBehaviour
         _shipsInFloatilla.ForEach(ship => ship.FireActiveCannons(direction));
 	}
 
+    public void StopActiveCannons(Vector3 direction)
+	{
+        _shipsInFloatilla.ForEach(ship => ship.StopActiveCannons(direction));
+    }
+
     public float GetEngineThrust(Vector3 direction)
     {
         return _shipsInFloatilla.Sum(ship => ship.GetEngineThrust(direction));

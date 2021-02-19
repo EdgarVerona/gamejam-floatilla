@@ -25,6 +25,11 @@ public class Ship : MonoBehaviour
         _cannons.ForEach(cannon => cannon.Fire());
 	}
 
+    public void StopActiveCannons(Vector3 direction)
+    {
+        _cannons.ForEach(cannon => cannon.CeaseFire());
+    }
+
     public int GetHullCount()
 	{
         return _hullPieces.Count;

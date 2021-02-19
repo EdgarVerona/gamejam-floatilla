@@ -5,13 +5,13 @@ using UnityEngine;
 public class Hull : MonoBehaviour
 {
     [SerializeField]
-    public GameObject TopDevice;
+    GameObject TopDevice;
     [SerializeField]
-    public GameObject BottomDevice;
+    GameObject BottomDevice;
     [SerializeField]
-    public GameObject LeftDevice;
+    GameObject LeftDevice;
     [SerializeField]
-    public GameObject RightDevice;
+    GameObject RightDevice;
 
     private Dictionary<Vector3, GameObject> _instantiatedDevices = new Dictionary<Vector3, GameObject>();
 
@@ -19,6 +19,30 @@ public class Hull : MonoBehaviour
 	{
         return _instantiatedDevices;
 	}
+
+    public IEnumerable<KeyValuePair<Vector3, GameObject>> GetDevicePrefabs()
+	{
+        Dictionary<Vector3, GameObject> results = new Dictionary<Vector3, GameObject>();
+
+        if (this.TopDevice != null)
+		{
+            results.Add(Vector3.forward, this.TopDevice);
+        }
+        if (this.BottomDevice != null)
+        {
+            results.Add(Vector3.back, this.BottomDevice);
+        }
+        if (this.LeftDevice != null)
+        {
+            results.Add(Vector3.left, this.LeftDevice);
+        }
+        if (this.RightDevice != null)
+        {
+            results.Add(Vector3.right, this.RightDevice);
+        }
+
+        return results;
+    }
 
     // Start is called before the first frame update
     void Start()

@@ -41,14 +41,16 @@ public class HullGridEditor : MonoBehaviour
 
 			Gizmos.matrix = this.transform.localToWorldMatrix;
 			Gizmos.color = Color.blue;
-			DrawGizmoForDevice(hull.TopDevice, Vector3.forward);
-			DrawGizmoForDevice(hull.BottomDevice, Vector3.back);
-			DrawGizmoForDevice(hull.LeftDevice, Vector3.left);
-			DrawGizmoForDevice(hull.RightDevice, Vector3.right);
+			var prefabs = hull.GetDevicePrefabs();
+
+			foreach (var prefab in prefabs)
+			{
+				DrawGizmoForDevice(prefab.Key, prefab.Value);
+			}
 		}
 	}
 
-	private void DrawGizmoForDevice(GameObject device, Vector3 direction)
+	private void DrawGizmoForDevice(Vector3 direction, GameObject device)
 	{
 		if (device != null)
 		{

@@ -8,27 +8,37 @@ public class Cannon : MonoBehaviour
     int Damage = 1;
 
     [SerializeField]
-    float ReloadTimeInSeconds = 3.0f;
+    ParticleSystem Projectile;
 
-    [SerializeField]
-    float ProjectileSpeed = 5.0f;
-
-    [SerializeField]
-    float ProjectileRange = 20.0f;
+    private bool _firing = false;
 
     public void Fire()
 	{
-        print("FIRING");
-	}
+        _firing = true;
+
+    }
+
+    public void CeaseFire()
+	{
+        _firing = false;
+
+    }
 
     void Start()
     {
-        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (_firing && !Projectile.isPlaying)
+		{
+            Projectile.Play();
+        }
+
+        if (!_firing)
+		{
+            Projectile.Stop();
+		}
     }
 }

@@ -66,11 +66,11 @@ public class FloatillaControls : MonoBehaviour
 	{
 		if (context.performed)
 		{
-			print("Firing!");
+			_floatilla.FireActiveCannons(Vector3.forward);
 		}
 		else if (context.canceled)
 		{
-			print("Firing stopped!");
+			_floatilla.StopActiveCannons(Vector3.forward);
 		}
 	}
 
