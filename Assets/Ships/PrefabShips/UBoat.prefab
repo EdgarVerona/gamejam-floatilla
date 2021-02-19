@@ -450,6 +450,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7988171517634344207, guid: e182a5abb3efebe4c802a28f054fd182, type: 3}
+      propertyPath: LeftDevice
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7988171517634344207, guid: e182a5abb3efebe4c802a28f054fd182, type: 3}
       propertyPath: RightDevice
       value: 
       objectReference: {fileID: 0}
@@ -589,6 +593,10 @@ PrefabInstance:
       propertyPath: LeftDevice
       value: 
       objectReference: {fileID: 5896529014437217899, guid: 62d9040840a65604fb20fb0e6299652e, type: 3}
+    - target: {fileID: 7988171517634344207, guid: e182a5abb3efebe4c802a28f054fd182, type: 3}
+      propertyPath: RightDevice
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e182a5abb3efebe4c802a28f054fd182, type: 3}
 --- !u!4 &2548665862981293506 stripped

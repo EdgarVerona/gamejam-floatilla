@@ -131,13 +131,13 @@ public class FloatillaControls : MonoBehaviour
 		float translateY = 0.0f;
 		if (_thrustX != 0)
 		{
-			float thrustPerSecond = _floatilla.GetEngineThrust(_thrustX > 0 ? Direction.Right : Direction.Left);
+			float thrustPerSecond = _floatilla.GetEngineThrust(_thrustX > 0 ? Vector3.left : Vector3.right);
 
 			translateX = thrustPerSecond * _thrustX *Time.deltaTime;
 		}
 		if (_thrustY != 0)
 		{
-			float thrustPerSecond = _floatilla.GetEngineThrust(_thrustY > 0 ? Direction.Up : Direction.Down);
+			float thrustPerSecond = _floatilla.GetEngineThrust(_thrustY > 0 ? Vector3.back : Vector3.forward);
 
 			translateY = thrustPerSecond * _thrustY * Time.deltaTime;
 		}

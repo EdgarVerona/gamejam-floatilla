@@ -2,11 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Engine : MonoBehaviour
+public class MooringPoint : MonoBehaviour
 {
-    [SerializeField]
-    public float ForcePerSecond = 1.0f;
-
     void Start()
     {
         

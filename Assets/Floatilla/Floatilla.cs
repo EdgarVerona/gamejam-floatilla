@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Floatilla : MonoBehaviour
@@ -7,16 +8,21 @@ public class Floatilla : MonoBehaviour
 
     private Vector3 _localCenterpoint;
 
+    private List<Ship> _shipsInFloatilla = new List<Ship>();
+
     public int GetHullCount()
 	{
-        //$$TODO - Replace with actual hull count
-        return 3;
+        return _shipsInFloatilla.Sum(ship => ship.GetHullCount());
+    }
+
+    public void FireActiveCannons(Vector3 direction)
+	{
+        _shipsInFloatilla.ForEach(ship => ship.FireActiveCannons(direction));
 	}
 
-    public float GetEngineThrust(Direction direction)
+    public float GetEngineThrust(Vector3 direction)
     {
-        //$$TODO - Replace with actual engine thrust
-        return 10.0f;
+        return _shipsInFloatilla.Sum(ship => ship.GetEngineThrust(direction));
     }
 
     public Vector3 GetWorldMidpoint()
@@ -27,7 +33,8 @@ public class Floatilla : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        var ships = this.GetComponentsInChildren<Ship>();
+        _shipsInFloatilla = this.GetComponentsInChildren<Ship>().ToList();
+
         var bounds = MathUtilities.GetMaxBounds(this.gameObject);
 
         _localCenterpoint = this.transform.worldToLocalMatrix.MultiplyPoint(bounds.center);

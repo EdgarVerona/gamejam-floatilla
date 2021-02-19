@@ -25,16 +25,8 @@ public class HullGridEditor : MonoBehaviour
 
 	void Update()
 	{
-		bool isInAllowedPrefab = false;
-
-#if UNITY_EDITOR
-		var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
-		isInAllowedPrefab = prefabStage != null 
-			&& prefabStage.mode == PrefabStage.Mode.InIsolation
-			&& prefabStage.scene.path == this.gameObject.scene.path;
-#endif
 		// Only allow for this editing in prefab mode
-		if (Application.isEditor && !Application.isPlaying)
+		if (EditorUtilities.IsEditMode())
 		{
 			AffixToGrid();
 		}
@@ -43,14 +35,17 @@ public class HullGridEditor : MonoBehaviour
 
 	private void OnDrawGizmos()
 	{
-		Hull hull = this.GetComponent<Hull>();
+		if (EditorUtilities.IsEditMode())
+		{
+			Hull hull = this.GetComponent<Hull>();
 
-		Gizmos.matrix = this.transform.localToWorldMatrix;
-		Gizmos.color = Color.blue;
-		DrawGizmoForDevice(hull.TopDevice, Vector3.forward);
-		DrawGizmoForDevice(hull.BottomDevice, Vector3.back);
-		DrawGizmoForDevice(hull.LeftDevice, Vector3.left);
-		DrawGizmoForDevice(hull.RightDevice, Vector3.right);
+			Gizmos.matrix = this.transform.localToWorldMatrix;
+			Gizmos.color = Color.blue;
+			DrawGizmoForDevice(hull.TopDevice, Vector3.forward);
+			DrawGizmoForDevice(hull.BottomDevice, Vector3.back);
+			DrawGizmoForDevice(hull.LeftDevice, Vector3.left);
+			DrawGizmoForDevice(hull.RightDevice, Vector3.right);
+		}
 	}
 
 	private void DrawGizmoForDevice(GameObject device, Vector3 direction)

@@ -16,6 +16,11 @@ public class Cannon : MonoBehaviour
     [SerializeField]
     float ProjectileRange = 20.0f;
 
+    public void Fire()
+	{
+        print("FIRING");
+	}
+
     void Start()
     {
         
