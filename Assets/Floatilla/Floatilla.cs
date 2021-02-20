@@ -58,4 +58,9 @@ public class Floatilla : MonoBehaviour
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(bounds.center, 0.1f);
     }
+
+    void OnCollision(Collider other)
+	{
+        print($"Floatilla Collided with {other.name}");
+	}
 }

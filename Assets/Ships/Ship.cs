@@ -79,9 +79,13 @@ public class Ship : MonoBehaviour
 		}
 	}
 
-    
     void Update()
     {
         
+    }
+
+    void OnCollision(Collider other)
+    {
+        print($"Ship {this.name} Collided with {other.name}");
     }
 }

@@ -5,17 +5,22 @@ using UnityEngine;
 public class Cannon : MonoBehaviour
 {
     [SerializeField]
-    int Damage = 1;
+    float ReloadInSeconds = 2.0f;
 
     [SerializeField]
-    ParticleSystem Projectile;
+    Projectile ProjectilePrefab;
+
+    [SerializeField]
+    GameObject FiringPoint;
+
 
     private bool _firing = false;
+
+    private float _timeLastFired = 0.0f;
 
     public void Fire()
 	{
         _firing = true;
-
     }
 
     public void CeaseFire()
@@ -31,14 +36,23 @@ public class Cannon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_firing && !Projectile.isPlaying)
+        if (_firing)
 		{
-            Projectile.Play();
+            // If time to fire again, do so.
+            if ((_timeLastFired + this.ReloadInSeconds) <= Time.time)
+			{
+                InitiateFiringInternal();
+			}
         }
+    }
 
-        if (!_firing)
-		{
-            Projectile.Stop();
-		}
+    private void InitiateFiringInternal()
+	{
+        GameObject.Instantiate(
+            this.ProjectilePrefab,
+            this.FiringPoint.transform.position,
+            this.transform.rotation);
+
+        _timeLastFired = Time.time;
     }
 }

@@ -13,8 +13,8 @@ public class PirateShipAIController : MonoBehaviour
     private Ship _ship;
     private Floatilla _floatilla;
 
-    public List<Vector3> _preferredCannonDirections;
-    public List<Vector3> _thrustDirectionsByPower;
+	private List<Vector3> _preferredCannonDirections;
+	private List<Vector3> _thrustDirectionsByPower;
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +44,7 @@ public class PirateShipAIController : MonoBehaviour
 			- If cannons are facing the floatilla, fire.
 			- Find the direction with the most engines toward/lateral to the floatilla, and ignite in that direction.
 		*/
+		Vector3 relativePosition = this.transform.position - _floatilla.transform.position;
 	}
 
 	private void BuildCannonOptions()

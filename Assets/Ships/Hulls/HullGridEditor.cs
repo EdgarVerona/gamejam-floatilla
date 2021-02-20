@@ -96,6 +96,6 @@ public class HullGridEditor : MonoBehaviour
 
 	private void UpdateLabel()
 	{
-		print($"{_lastKnownPosition.x},{_lastKnownPosition.y}");
+		//print($"{_lastKnownPosition.x},{_lastKnownPosition.y}");
 	}
 }

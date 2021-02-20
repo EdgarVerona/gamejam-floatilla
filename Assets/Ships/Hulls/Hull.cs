@@ -66,7 +66,6 @@ public class Hull : MonoBehaviour
 	{
         if (prefabDevice != null)
         {
-            
             var newObject = GameObject.Instantiate(prefabDevice, this.transform.position, this.transform.rotation * Quaternion.LookRotation(direction), this.transform);
             _instantiatedDevices.Add(direction, newObject);
         }
