@@ -155,7 +155,7 @@ public class Ship : MonoBehaviour
 		{
             SendMessageUpwards("OnShipDeath", this, SendMessageOptions.DontRequireReceiver);
             Destroy(this.gameObject);
-		}
+        }
     }
 
     void OnCollision(Collider other)

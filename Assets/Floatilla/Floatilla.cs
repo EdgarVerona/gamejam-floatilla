@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Floatilla : MonoBehaviour
 {
+    [SerializeField]
+    GameState GameState;
 
     private Vector3 _localCenterpoint;
 
@@ -77,5 +79,10 @@ public class Floatilla : MonoBehaviour
     void OnShipDeath(Ship shipDying)
 	{
         _shipsInFloatilla.Remove(shipDying);
+
+        if (_shipsInFloatilla.Count == 0)
+		{
+            this.GameState.TriggerGameOver();
+        }
     }
 }

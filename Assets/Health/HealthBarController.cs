@@ -15,7 +15,13 @@ public class HealthBarController : MonoBehaviour
         Health.OnHealthRemoved += RemoveHealthBar;
 	}
 
-    private void AddHealthBar(Health health)
+	private void OnDestroy()
+	{
+        Health.OnHealthAdded -= AddHealthBar;
+        Health.OnHealthRemoved -= RemoveHealthBar;
+    }
+
+	private void AddHealthBar(Health health)
 	{
         if (!_healthBars.ContainsKey(health))
 		{
@@ -29,7 +35,7 @@ public class HealthBarController : MonoBehaviour
     {
         if (_healthBars.TryGetValue(health, out HealthBar healthBar))
 		{
-            if (healthBar.gameObject != null)
+            if (healthBar != null)
 			{
                 Destroy(healthBar.gameObject);
             }
