@@ -73,4 +73,9 @@ public class Floatilla : MonoBehaviour
 	{
         print($"Floatilla Collided with {other.name}");
 	}
+
+    void OnShipDeath(Ship shipDying)
+	{
+        _shipsInFloatilla.Remove(shipDying);
+    }
 }

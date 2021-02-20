@@ -5,14 +5,30 @@ using UnityEngine;
 
 public class Ship : MonoBehaviour
 {
+    [SerializeField]
+    float MaximumHitpoints = 5.0f;
+
+    private float _currentHitpoints;
 
     private KeyedLists<Vector3, Engine> _engines;
     private KeyedLists<Vector3, Cannon> _cannons;
     private List<MooringPoint> _mooringPoints;
     private List<Hull> _hullPieces;
 
+    private bool _isDying = false;
+
+    public float GetCurrentHitpoints()
+	{
+        return _currentHitpoints;
+	}
+
     public KeyedLists<Vector3, Cannon> GetCannons()
 	{
+        if (_isDying)
+		{
+            return KeyedLists<Vector3, Cannon>.Empty;
+		}
+
         if (_cannons == null)
 		{
             Initialize();
@@ -23,6 +39,11 @@ public class Ship : MonoBehaviour
 
     public KeyedLists<Vector3, Engine> GetEngines()
     {
+        if (_isDying)
+        {
+            return KeyedLists<Vector3, Engine>.Empty;
+        }
+
         if (_engines == null)
 		{
             Initialize();
@@ -45,29 +66,44 @@ public class Ship : MonoBehaviour
 	{
         float result = 0.0f;
 
-        GetEngines().ForEach(direction * -1, Engine => result += Engine.ForcePerSecond);
+        if (!_isDying)
+		{
+            GetEngines().ForEach(direction * -1, Engine => result += Engine.ForcePerSecond);
+        }
 
         return result;
 	}
 
     public void FireActiveCannons(Vector3 direction)
 	{
-        GetCannons().ForEach(direction, cannon => cannon.Fire());
+        if (!_isDying)
+		{
+            GetCannons().ForEach(direction, cannon => cannon.Fire());
+        }
 	}
 
     public void StopActiveCannons(Vector3 direction)
     {
-        GetCannons().ForEach(direction, cannon => cannon.CeaseFire());
+        if (!_isDying)
+		{
+            GetCannons().ForEach(direction, cannon => cannon.CeaseFire());
+        }
     }
 
     public void FireActiveCannonsAllDirections()
     {
-        GetCannons().ForEachAllKeys(ship => ship.Fire());
+        if (!_isDying)
+        {
+            GetCannons().ForEachAllKeys(cannon => cannon.Fire());
+        }
     }
 
     public void StopActiveCannonsAllDirections()
     {
-        GetCannons().ForEachAllKeys(ship => ship.CeaseFire());
+        if (!_isDying)
+		{
+            GetCannons().ForEachAllKeys(cannon => cannon.CeaseFire());
+        }
     }
 
     public int GetHullCount()
@@ -77,6 +113,8 @@ public class Ship : MonoBehaviour
 
     void Start()
     {
+        _currentHitpoints = this.MaximumHitpoints;
+        _isDying = false;
     }
 
     private void Initialize()
@@ -120,11 +158,33 @@ public class Ship : MonoBehaviour
 
     void Update()
     {
-        
+        if (_isDying)
+		{
+            SendMessageUpwards("OnShipDeath", this, SendMessageOptions.DontRequireReceiver);
+            Destroy(this.gameObject);
+		}
     }
 
     void OnCollision(Collider other)
     {
-        print($"Ship {this.name} Collided with {other.name}");
+        if (!_isDying)
+		{
+            var damageComponent = other.GetComponent<DamageComponent>();
+
+            if (damageComponent)
+            {
+                _currentHitpoints -= damageComponent.Damage;
+
+                if (_currentHitpoints <= 0)
+                {
+                    _currentHitpoints = 0;
+                    _isDying = true;
+                }
+            }
+            else
+            {
+                print($"Ship {this.name} Collided with {other.name}, but no damage component found");
+            }
+        }
     }
 }

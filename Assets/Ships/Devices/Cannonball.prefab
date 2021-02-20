@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 5000231107078627494}
   - component: {fileID: 4431539772597537728}
   - component: {fileID: 5165239266015795069}
-  - component: {fileID: 3482156128225819654}
-  - component: {fileID: 2028035668172179276}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: DamageDealer
@@ -83,34 +81,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3482156128225819654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 515036061798976317}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2b1b9d70333d3bc4d99ba944d5d4bdf9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Damage: 1
-  Speed: 30
-  LifetimeInSeconds: 3
---- !u!65 &2028035668172179276
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 515036061798976317}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.47986445, y: 5.096933, z: 0.36092976}
-  m_Center: {x: -0.00973554, y: 0.21751142, z: 0.039354846}
 --- !u!1 &3431934299289525424
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,7 +90,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3530963760758600232}
-  - component: {fileID: 7254729512009965851}
+  - component: {fileID: 3590829435003755395}
+  - component: {fileID: 6156090669629410139}
+  - component: {fileID: 1305154764975156065}
   m_Layer: 0
   m_Name: Cannonball
   m_TagString: DamageDealer
@@ -143,7 +115,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7254729512009965851
+--- !u!114 &3590829435003755395
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -155,6 +127,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b1b9d70333d3bc4d99ba944d5d4bdf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 1
   Speed: 30
   LifetimeInSeconds: 3
+--- !u!65 &6156090669629410139
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3431934299289525424}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.47986445, y: 5.096933, z: 0.36092976}
+  m_Center: {x: -0.00973554, y: 0.21751142, z: 0.039354846}
+--- !u!114 &1305154764975156065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3431934299289525424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe067b23084bb2d428c95e5eb90d898f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Damage: 1

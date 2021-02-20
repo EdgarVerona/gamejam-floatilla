@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollisionNotifier : MonoBehaviour
+public class DamageComponent : MonoBehaviour
 {
+    [SerializeField]
+    public float Damage = 1.0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,12 +18,4 @@ public class CollisionNotifier : MonoBehaviour
     {
         
     }
-
-	private void OnTriggerEnter(Collider other)
-	{
-        if (other.tag.Equals("DamageDealer"))
-		{
-            SendMessageUpwards("OnCollision", other, SendMessageOptions.DontRequireReceiver);
-        }
-	}
 }

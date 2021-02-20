@@ -5,9 +5,6 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField]
-    float Damage = 1.0f;
-
-    [SerializeField]
     float Speed = 30.0f;
 
     [SerializeField]
@@ -16,11 +13,6 @@ public class Projectile : MonoBehaviour
     bool _isDestroying = false;
 
     float _timeCreated = 0.0f;
-
-    public float GetDamage()
-	{
-        return _isDestroying ? 0.0f : this.Damage;
-	}
 
     // Start is called before the first frame update
     void Start()

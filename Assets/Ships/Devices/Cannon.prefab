@@ -76,7 +76,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ReloadInSeconds: 2
-  ProjectilePrefab: {fileID: 7254729512009965851, guid: 0b830894cf0c24e4299e444d6a01ee43, type: 3}
+  ProjectilePrefab: {fileID: 3590829435003755395, guid: 0b830894cf0c24e4299e444d6a01ee43, type: 3}
   FiringPoint: {fileID: 5060000417992160921}
 --- !u!1 &7496482257283090061
 GameObject:

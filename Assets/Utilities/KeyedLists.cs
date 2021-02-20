@@ -9,6 +9,10 @@ public class KeyedLists<TKey, TValue> : IReadOnlyDictionary<TKey, List<TValue>>
 {
 	private Dictionary<TKey, List<TValue>> _data = new Dictionary<TKey, List<TValue>>();
 
+	private static KeyedLists<TKey, TValue> _empty = new KeyedLists<TKey, TValue>();
+
+	public static KeyedLists<TKey, TValue> Empty => _empty;
+
 	public IEnumerable<TKey> Keys => _data.Keys;
 
 	public IEnumerable<List<TValue>> Values => _data.Values;
