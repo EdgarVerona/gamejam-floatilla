@@ -6,56 +6,95 @@ using UnityEngine;
 public class Ship : MonoBehaviour
 {
 
-    private KeyedLists<Vector3, Engine> _engines = new KeyedLists<Vector3, Engine>();
-    private KeyedLists<Vector3, Cannon> _cannons = new KeyedLists<Vector3, Cannon>();
-    private List<MooringPoint> _mooringPoints = new List<MooringPoint>();
-    private List<Hull> _hullPieces = new List<Hull>();
+    private KeyedLists<Vector3, Engine> _engines;
+    private KeyedLists<Vector3, Cannon> _cannons;
+    private List<MooringPoint> _mooringPoints;
+    private List<Hull> _hullPieces;
 
     public KeyedLists<Vector3, Cannon> GetCannons()
 	{
+        if (_cannons == null)
+		{
+            Initialize();
+        }
+
         return _cannons;
 	}
 
-    public KeyedLists<Vector3, Cannon> GetEngines()
+    public KeyedLists<Vector3, Engine> GetEngines()
     {
-        return _cannons;
+        if (_engines == null)
+		{
+            Initialize();
+        }
+
+        return _engines;
     }
+
+    public List<Hull> GetHullPieces()
+	{
+        if (_hullPieces == null)
+		{
+            Initialize();
+		}
+
+        return _hullPieces;
+	}
 
     public float GetEngineThrust(Vector3 direction)
 	{
         float result = 0.0f;
 
-        _engines.ForEach(direction, Engine => result += Engine.ForcePerSecond);
+        GetEngines().ForEach(direction * -1, Engine => result += Engine.ForcePerSecond);
 
         return result;
 	}
 
     public void FireActiveCannons(Vector3 direction)
 	{
-        _cannons.ForEachAllKeys(cannon => cannon.Fire());
+        GetCannons().ForEach(direction, cannon => cannon.Fire());
 	}
 
     public void StopActiveCannons(Vector3 direction)
     {
-        _cannons.ForEachAllKeys(cannon => cannon.CeaseFire());
+        GetCannons().ForEach(direction, cannon => cannon.CeaseFire());
+    }
+
+    public void FireActiveCannonsAllDirections()
+    {
+        GetCannons().ForEachAllKeys(ship => ship.Fire());
+    }
+
+    public void StopActiveCannonsAllDirections()
+    {
+        GetCannons().ForEachAllKeys(ship => ship.CeaseFire());
     }
 
     public int GetHullCount()
 	{
-        return _hullPieces.Count;
+        return GetHullPieces().Count;
 	}
 
     void Start()
     {
+    }
+
+    private void Initialize()
+	{
+        _hullPieces = new List<Hull>();
+        _engines = new KeyedLists<Vector3, Engine>();
+        _mooringPoints = new List<MooringPoint>();
+        _cannons = new KeyedLists<Vector3, Cannon>();
+
         _hullPieces = GetComponentsInChildren<Hull>().ToList();
-        
+
         foreach (var hull in _hullPieces)
-		{
+        {
             foreach (var device in hull.GetDevices())
-			{
+            {
                 AddDevice(device.Key, device.Value);
             }
-		}
+        }
     }
 
     private void AddDevice(Vector3 direction, GameObject device)

@@ -13,10 +13,15 @@ public class Hull : MonoBehaviour
     [SerializeField]
     GameObject RightDevice;
 
-    private Dictionary<Vector3, GameObject> _instantiatedDevices = new Dictionary<Vector3, GameObject>();
+    private Dictionary<Vector3, GameObject> _instantiatedDevices;
 
     public IEnumerable<KeyValuePair<Vector3, GameObject>> GetDevices()
 	{
+        if (_instantiatedDevices == null)
+		{
+            Initialize();
+		}
+
         return _instantiatedDevices;
 	}
 
@@ -45,8 +50,10 @@ public class Hull : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    void Initialize()
     {
+        _instantiatedDevices = new Dictionary<Vector3, GameObject>();
+
         if (Application.isPlaying)
 		{
             this.InstantiateDevice(this.TopDevice, Vector3.forward);

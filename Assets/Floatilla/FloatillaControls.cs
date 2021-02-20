@@ -66,11 +66,11 @@ public class FloatillaControls : MonoBehaviour
 	{
 		if (context.performed)
 		{
-			_floatilla.FireActiveCannons(Vector3.forward);
+			_floatilla.FireActiveCannonsAllDirections();
 		}
 		else if (context.canceled)
 		{
-			_floatilla.StopActiveCannons(Vector3.forward);
+			_floatilla.StopActiveCannonsAllDirections();
 		}
 	}
 
@@ -137,7 +137,7 @@ public class FloatillaControls : MonoBehaviour
 		}
 		if (_thrustY != 0)
 		{
-			float thrustPerSecond = _floatilla.GetEngineThrust(_thrustY > 0 ? Vector3.back : Vector3.forward);
+			float thrustPerSecond = _floatilla.GetEngineThrust(_thrustY > 0 ? Vector3.forward : Vector3.back);
 
 			translateY = thrustPerSecond * _thrustY * Time.deltaTime;
 		}
