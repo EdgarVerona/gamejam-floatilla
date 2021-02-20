@@ -18,9 +18,6 @@ public class CollisionNotifier : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-        if (other.tag.Equals("DamageDealer"))
-		{
-            SendMessageUpwards("OnCollision", other, SendMessageOptions.DontRequireReceiver);
-        }
-	}
+        SendMessageUpwards("OnCollision", other, SendMessageOptions.DontRequireReceiver);
+    }
 }
