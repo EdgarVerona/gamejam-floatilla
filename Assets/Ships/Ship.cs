@@ -1,26 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+[RequireComponent(typeof(Health))]
 public class Ship : MonoBehaviour
 {
-    [SerializeField]
-    float MaximumHitpoints = 5.0f;
-
-    private float _currentHitpoints;
-
     private KeyedLists<Vector3, Engine> _engines;
     private KeyedLists<Vector3, Cannon> _cannons;
     private List<MooringPoint> _mooringPoints;
     private List<Hull> _hullPieces;
 
     private bool _isDying = false;
-
-    public float GetCurrentHitpoints()
-	{
-        return _currentHitpoints;
-	}
+    private Health _health;
 
     public KeyedLists<Vector3, Cannon> GetCannons()
 	{
@@ -113,8 +106,8 @@ public class Ship : MonoBehaviour
 
     void Start()
     {
-        _currentHitpoints = this.MaximumHitpoints;
         _isDying = false;
+        _health = GetComponent<Health>();
     }
 
     private void Initialize()
@@ -173,13 +166,12 @@ public class Ship : MonoBehaviour
 
             if (damageComponent)
             {
-                _currentHitpoints -= damageComponent.Damage;
+                _health.Damage(damageComponent);
 
-                if (_currentHitpoints <= 0)
-                {
-                    _currentHitpoints = 0;
+                if (_health.CurrentHitpoints <= 0)
+				{
                     _isDying = true;
-                }
+				}
             }
             else
             {
