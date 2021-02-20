@@ -10,7 +10,8 @@ public class Projectile : MonoBehaviour
     [SerializeField]
     float LifetimeInSeconds = 3.0f;
 
-    bool _isDestroying = false;
+    [SerializeField]
+    Rigidbody Rigidbody;
 
     float _timeCreated = 0.0f;
 
@@ -20,18 +21,12 @@ public class Projectile : MonoBehaviour
         _timeCreated = Time.time;
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        // Destroy if you can.
-        if (_isDestroying)
-		{
-            Destroy(this.gameObject);
-        }
-        else if ((_timeCreated + this.LifetimeInSeconds) <= Time.time)
+        if ((_timeCreated + this.LifetimeInSeconds) <= Time.time)
 		{
             // If the ball's lifetime has expired, kill it.
-            Destroy(this.gameObject);
+            DoDestroy();
         }
         else
 		{
@@ -42,6 +37,11 @@ public class Projectile : MonoBehaviour
 
 	private void OnTriggerEnter(Collider other)
 	{
-        _isDestroying = true;
-	}
+        DoDestroy();
+    }
+
+	private void DoDestroy()
+	{
+        Destroy(this.gameObject);
+    }
 }

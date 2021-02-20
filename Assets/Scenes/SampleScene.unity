@@ -165,7 +165,7 @@ MeshCollider:
   m_GameObject: {fileID: 313716314}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -784,24 +784,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!1 &1340823352 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 419519494944043169, guid: 13ae8d40a6187344c9ee1856e983bbf9, type: 3}
-  m_PrefabInstance: {fileID: 1811385307}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1340823353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1340823352}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff639c2643337204eb3286379341f772, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaximumHitpoints: 5
 --- !u!4 &1340823356 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8000845199939758772, guid: 13ae8d40a6187344c9ee1856e983bbf9, type: 3}
@@ -821,7 +803,7 @@ GameObject:
   - component: {fileID: 1735196164}
   - component: {fileID: 1735196167}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Shore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -919,24 +901,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!1 &1784971242 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2938390318064040304, guid: 75bd6c3275cf4fd448e04bf6b6e509a4, type: 3}
-  m_PrefabInstance: {fileID: 1873748162}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1784971243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1784971242}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ff639c2643337204eb3286379341f772, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MaximumHitpoints: 5
 --- !u!1 &1801470043
 GameObject:
   m_ObjectHideFlags: 0
@@ -1022,10 +986,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: UBoat
       objectReference: {fileID: 0}
-    - target: {fileID: 3033701875209122312, guid: 13ae8d40a6187344c9ee1856e983bbf9, type: 3}
-      propertyPath: m_IsKinematic
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8000845199939758772, guid: 13ae8d40a6187344c9ee1856e983bbf9, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1081,7 +1041,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2938390318064040304, guid: 75bd6c3275cf4fd448e04bf6b6e509a4, type: 3}
       propertyPath: m_Name
-      value: PirateHull
+      value: Pirate
       objectReference: {fileID: 0}
     - target: {fileID: 3321325319539458745, guid: 75bd6c3275cf4fd448e04bf6b6e509a4, type: 3}
       propertyPath: m_RootOrder
@@ -1267,6 +1227,8 @@ GameObject:
   - component: {fileID: 1968778365}
   - component: {fileID: 1968778364}
   - component: {fileID: 1968778366}
+  - component: {fileID: 1968778368}
+  - component: {fileID: 1968778367}
   m_Layer: 0
   m_Name: Floatilla
   m_TagString: Untagged
@@ -1471,6 +1433,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2261efc590a1591438d6e1204117b885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThrustControl: {fileID: 1968778368}
+  FloatillaReference: {fileID: 1968778366}
   MaxDegreesPerSecondRotation: 90
   MinDegreesPerSecondRotation: 10
   TurnReductionPerHullPiece: 5
@@ -1487,6 +1451,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   GameState: {fileID: 1206980026}
+--- !u!54 &1968778367
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968778362}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &1968778368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1968778362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 436adc4a982de964e925ae3157a8f39e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RigidBody: {fileID: 1968778367}
 --- !u!1001 &4639986288375803519
 PrefabInstance:
   m_ObjectHideFlags: 0

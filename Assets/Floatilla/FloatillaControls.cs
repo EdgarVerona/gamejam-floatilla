@@ -4,9 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Floatilla))]
 public class FloatillaControls : MonoBehaviour
 {
+	[SerializeField]
+	ThrustableComponent ThrustControl;
+
+	[SerializeField]
+	Floatilla FloatillaReference;
+
 	[SerializeField]
 	float MaxDegreesPerSecondRotation = 90.0f; // Default 1/4 circle per second at max turn speed
 
@@ -16,15 +21,12 @@ public class FloatillaControls : MonoBehaviour
 	[SerializeField]
 	float TurnReductionPerHullPiece = 5.0f; // For each hull piece in the floatilla, reduce max speed by this many degrees.
 
-	private Floatilla _floatilla;
-
 	private int _rotateDirection = 0;
 	private int _thrustX = 0;
 	private int _thrustY = 0;
 
 	public void Start()
 	{
-		_floatilla = GetComponent<Floatilla>();
 	}
 
 	public void OnMove(InputAction.CallbackContext context)
@@ -66,11 +68,11 @@ public class FloatillaControls : MonoBehaviour
 	{
 		if (context.performed)
 		{
-			_floatilla.FireActiveCannonsAllDirections();
+			this.FloatillaReference.FireActiveCannonsAllDirections();
 		}
 		else if (context.canceled)
 		{
-			_floatilla.StopActiveCannonsAllDirections();
+			this.FloatillaReference.StopActiveCannonsAllDirections();
 		}
 	}
 
@@ -119,7 +121,7 @@ public class FloatillaControls : MonoBehaviour
 	}
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
 	{
 		RotateShip();
 		ThrustShip();
@@ -127,22 +129,18 @@ public class FloatillaControls : MonoBehaviour
 
 	private void ThrustShip()
 	{
-		float translateX = 0.0f;
-		float translateY = 0.0f;
+		Vector3 speedPerDirection = new Vector3(0.0f, 0.0f, 0.0f);
+
 		if (_thrustX != 0)
 		{
-			float thrustPerSecond = _floatilla.GetEngineThrust(_thrustX > 0 ? Vector3.left : Vector3.right);
-
-			translateX = thrustPerSecond * _thrustX *Time.deltaTime;
+			speedPerDirection.x = this.FloatillaReference.GetEngineThrust(_thrustX > 0 ? Vector3.left : Vector3.right);
 		}
 		if (_thrustY != 0)
 		{
-			float thrustPerSecond = _floatilla.GetEngineThrust(_thrustY > 0 ? Vector3.forward : Vector3.back);
-
-			translateY = thrustPerSecond * _thrustY * Time.deltaTime;
+			speedPerDirection.z = this.FloatillaReference.GetEngineThrust(_thrustY > 0 ? Vector3.forward : Vector3.back);
 		}
 
-		this.transform.Translate(translateX, 0.0f, translateY, Space.Self);
+		this.ThrustControl.ApplyThrust(new Vector3(_thrustX * speedPerDirection.x, 0.0f, _thrustY * speedPerDirection.z), 1);
 	}
 
 	private void RotateShip()
@@ -158,13 +156,13 @@ public class FloatillaControls : MonoBehaviour
 				break;
 		}
 
-		this.transform.RotateAround(_floatilla.GetWorldMidpoint(), Vector3.up, rotateAngle);
+		this.ThrustControl.ApplyRotation(rotateAngle);
 	}
 
 	private float CalculateRotationAngleMagnitude(float deltaTime)
 	{
 		float turnsPerSecond = Math.Max(
-			this.MaxDegreesPerSecondRotation - (this.TurnReductionPerHullPiece * _floatilla.GetHullCount()),
+			this.MaxDegreesPerSecondRotation - (this.TurnReductionPerHullPiece * this.FloatillaReference.GetHullCount()),
 			this.MinDegreesPerSecondRotation);
 
 		return turnsPerSecond * deltaTime;

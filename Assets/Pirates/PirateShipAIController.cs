@@ -4,9 +4,14 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[RequireComponent(typeof(Ship))]
 public class PirateShipAIController : MonoBehaviour
 {
+	[SerializeField]
+	Ship Ship;
+
+	[SerializeField]
+	ThrustableComponent ThrustControl;
+
 	[SerializeField]
 	public float PreferredDistance = 15.0f;
 
@@ -19,8 +24,7 @@ public class PirateShipAIController : MonoBehaviour
 	[SerializeField]
 	float TurnReductionPerHullPiece = 5.0f; // For each hull piece in the floatilla, reduce max speed by this many degrees.
 
-	private Ship _ship;
-    private Floatilla _floatilla;
+	private Floatilla _floatilla;
 
 	private List<Vector3> _preferredCannonDirections;
 	private List<Vector3> _thrustDirectionsByPower;
@@ -29,15 +33,13 @@ public class PirateShipAIController : MonoBehaviour
     void Start()
 	{
 		_floatilla = GameObject.FindObjectOfType<Floatilla>();
-		_ship = this.GetComponent<Ship>();
-
+		
 		// Build options we'll use later to decide movement for this frame.
 		BuildCannonOptions();
 		BuildThrustOptions();
 	}
 
-	// Update is called once per frame
-	void Update()
+	void FixedUpdate()
     {
 		if (_thrustDirectionsByPower.Count == 0 || _preferredCannonDirections.Count == 0)
 		{
@@ -93,20 +95,20 @@ public class PirateShipAIController : MonoBehaviour
 		{
 			if (Vector3.Angle(cannonDirection, relativePositionLocalSpace) < 15.0f)
 			{
-				_ship.FireActiveCannons(cannonDirection);
+				this.Ship.FireActiveCannons(cannonDirection);
 			}
 			else
 			{
-				_ship.StopActiveCannons(cannonDirection);
+				this.Ship.StopActiveCannons(cannonDirection);
 			}
 		}
 	}
 
 	private void ThrustInDirection(Vector3 direction)
 	{
-		var thrust = _ship.GetEngineThrust(direction);
+		var thrust = this.Ship.GetEngineThrust(direction);
 
-		_ship.transform.Translate(direction * thrust * Time.deltaTime);
+		this.ThrustControl.ApplyThrust(direction, thrust);
 	}
 
 	private void AngleTowardOpponentInDirection(Vector3 relativePositionLocalSpace, Vector3 destinationLocalHeading)
@@ -129,13 +131,13 @@ public class PirateShipAIController : MonoBehaviour
 	{
 		float rotateAngle = CalculateRotationAngleMagnitude(Time.deltaTime, destinationAngle) * rotateDirection;
 
-		_ship.transform.Rotate(Vector3.up, rotateAngle);
+		this.ThrustControl.ApplyRotation(rotateAngle);
 	}
 
 	private float CalculateRotationAngleMagnitude(float deltaTime, float destinationAngle)
 	{
 		float turnsPerSecond = Mathf.Max(
-			this.MaxDegreesPerSecondRotation - (this.TurnReductionPerHullPiece * _ship.GetHullCount()),
+			this.MaxDegreesPerSecondRotation - (this.TurnReductionPerHullPiece * this.Ship.GetHullCount()),
 			this.MinDegreesPerSecondRotation);
 
 		return Mathf.Min(destinationAngle, turnsPerSecond * deltaTime);
@@ -143,7 +145,7 @@ public class PirateShipAIController : MonoBehaviour
 
 	private void BuildCannonOptions()
 	{
-		var cannons = _ship.GetCannons();
+		var cannons = this.Ship.GetCannons();
 
 		Dictionary<Vector3, int> directionCannonCounts = new Dictionary<Vector3, int>()
 		{
@@ -169,10 +171,10 @@ public class PirateShipAIController : MonoBehaviour
 	{
 		Dictionary<Vector3, float> directionEngineThrust = new Dictionary<Vector3, float>()
 		{
-			{ Vector3.forward, _ship.GetEngineThrust(Vector3.forward) },
-			{ Vector3.back, _ship.GetEngineThrust(Vector3.back) },
-			{ Vector3.left, _ship.GetEngineThrust(Vector3.left) },
-			{ Vector3.right, _ship.GetEngineThrust(Vector3.right) }
+			{ Vector3.forward, this.Ship.GetEngineThrust(Vector3.forward) },
+			{ Vector3.back, this.Ship.GetEngineThrust(Vector3.back) },
+			{ Vector3.left, this.Ship.GetEngineThrust(Vector3.left) },
+			{ Vector3.right, this.Ship.GetEngineThrust(Vector3.right) }
 		};
 
 		_thrustDirectionsByPower = directionEngineThrust

@@ -20,4 +20,9 @@ public class CollisionNotifier : MonoBehaviour
 	{
         SendMessageUpwards("OnCollision", other, SendMessageOptions.DontRequireReceiver);
     }
+
+	private void OnCollisionEnter(Collision collision)
+	{
+        SendMessageUpwards("OnCollision", collision.collider, SendMessageOptions.DontRequireReceiver);
+    }
 }

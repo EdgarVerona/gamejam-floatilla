@@ -10,6 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 8000845199939758772}
   - component: {fileID: 8003516852654681789}
+  - component: {fileID: 6287537694210232326}
+  - component: {fileID: 8173614331334028111}
+  - component: {fileID: 5425720912974555857}
   m_Layer: 0
   m_Name: UBoat
   m_TagString: Untagged
@@ -50,6 +53,47 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 086d7da7c701786428f6bc878c075480, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6287537694210232326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419519494944043169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff639c2643337204eb3286379341f772, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaximumHitpoints: 5
+--- !u!54 &8173614331334028111
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419519494944043169}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 84
+  m_CollisionDetection: 0
+--- !u!114 &5425720912974555857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419519494944043169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 870590e531cc305428bb76b151cd5e19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &888673061719703843

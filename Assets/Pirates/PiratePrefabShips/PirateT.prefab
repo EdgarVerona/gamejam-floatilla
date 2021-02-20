@@ -11,6 +11,10 @@ GameObject:
   - component: {fileID: 3321325319539458745}
   - component: {fileID: 7059822705976928516}
   - component: {fileID: 5214209011770611696}
+  - component: {fileID: 7044216923379465825}
+  - component: {fileID: 4117849672040148597}
+  - component: {fileID: 4375668691511581564}
+  - component: {fileID: 8258897536666245541}
   m_Layer: 0
   m_Name: PirateT
   m_TagString: Untagged
@@ -61,10 +65,66 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5478822168fa00842ac550cc80aaa9ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Ship: {fileID: 7059822705976928516}
+  ThrustControl: {fileID: 4375668691511581564}
   PreferredDistance: 25
   MaxDegreesPerSecondRotation: 35
   MinDegreesPerSecondRotation: 10
   TurnReductionPerHullPiece: 5
+--- !u!54 &7044216923379465825
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2938390318064040304}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 84
+  m_CollisionDetection: 0
+--- !u!114 &4117849672040148597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2938390318064040304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff639c2643337204eb3286379341f772, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MaximumHitpoints: 5
+--- !u!114 &4375668691511581564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2938390318064040304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 436adc4a982de964e925ae3157a8f39e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RigidBody: {fileID: 7044216923379465825}
+--- !u!114 &8258897536666245541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2938390318064040304}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 870590e531cc305428bb76b151cd5e19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2814795795486884705
 PrefabInstance:
   m_ObjectHideFlags: 0

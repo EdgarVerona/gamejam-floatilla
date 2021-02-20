@@ -29,7 +29,7 @@ public class Health : MonoBehaviour
 		OnHealthPercentChanged(this.CurrentHitpoints / this.MaximumHitpoints);
 	}
 
-	private void OnEnable()
+	private void Start()
 	{
 		this.CurrentHitpoints = this.MaximumHitpoints;
 		Health.OnHealthAdded(this);
