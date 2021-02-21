@@ -20,6 +20,10 @@ It's a little thing, but I like the **LazyValue<T>** class that I made.
 
 I've got the start of the Interactables system going, which should be the foundation for all of the pie-in-the-sky crap in the future projects milestones (the various types of encounters, interactions with people, moral dilemmas, all that jazz).  So far that feels alright, we'll see if it holds up.
 
+### Twin stick action?
+
+I realized about halfway through that with the independent cannons and engines in the four cardinal directions, it might be fun if this were a twin stick shooter.  So that's what it is now, or at least what it's going to be once there's more things to shoot than a single manually spawned pirate.  So I guess my advice would be play it with a twin stick gamepad when it's in a more playable state.  Left stick = move in a direction if you have engines pointing that way to do so, right stick = fire cannons pointing in that direction if you have any, shoulder buttons = rotate the ship.
+
 ## Here there be dragons
 
 The PirateShipAiController is pretty terrible, as is the amount of code that is copy-and-paste shared between it and the FloatillaController.  It could use some clean up for sure, and the pirate ships need a wider variety of strategies, as well as strategies that make sense.  Maybe it could use the Unity pathfinding too, right now it's just making a beeline for the player regardless of what's in the way (and often resulting in its own doom)
