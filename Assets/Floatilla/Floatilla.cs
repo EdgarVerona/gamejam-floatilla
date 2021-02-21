@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,14 +38,19 @@ public class Floatilla : MonoBehaviour
         _shipsInFloatilla.ForEach(ship => ship.StopActiveCannonsAllDirections());
     }
 
-    public float GetEngineThrust(Vector3 direction)
+    internal void ApplyThrust(Vector3 direction)
     {
-        return _shipsInFloatilla.Sum(ship => ship.GetEngineThrust(direction));
+        _shipsInFloatilla.ForEach(ship => ship.ApplyThrust(direction));
+    }
+
+    internal void ApplyRotation(float rotateAngle)
+    {
+        _shipsInFloatilla.FirstOrDefault()?.ApplyRotation(rotateAngle);
     }
 
     public Vector3 GetWorldMidpoint()
     {
-        return this.transform.localToWorldMatrix.MultiplyPoint(_localCenterpoint);
+        return MathUtilities.GetMaxBoundsOfChildren(this.gameObject).center;
     }
 
     // Start is called before the first frame update
@@ -52,7 +58,7 @@ public class Floatilla : MonoBehaviour
     {
         _shipsInFloatilla = this.GetComponentsInChildren<Ship>().ToList();
 
-        var bounds = MathUtilities.GetMaxBounds(this.gameObject);
+        var bounds = MathUtilities.GetMaxBoundsOfChildren(this.gameObject);
 
         _localCenterpoint = this.transform.worldToLocalMatrix.MultiplyPoint(bounds.center);
     }
@@ -85,4 +91,6 @@ public class Floatilla : MonoBehaviour
             this.GameState.TriggerGameOver();
         }
     }
+
+	
 }

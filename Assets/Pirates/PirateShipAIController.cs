@@ -33,7 +33,7 @@ public class PirateShipAIController : MonoBehaviour
     void Start()
 	{
 		_floatilla = GameObject.FindObjectOfType<Floatilla>();
-		
+
 		// Build options we'll use later to decide movement for this frame.
 		BuildCannonOptions();
 		BuildThrustOptions();
@@ -60,13 +60,15 @@ public class PirateShipAIController : MonoBehaviour
 			- If cannons are facing the floatilla, fire.
 			- Find the direction with the most engines toward/lateral to the floatilla, and ignite in that direction.
 		*/
-		Vector3 relativePosition = this.transform.position - _floatilla.transform.position;
-		Vector3 relativePositionLocalSpace = this.transform.worldToLocalMatrix.MultiplyPoint(_floatilla.transform.position);
+
+		Vector3 floatillaMidpoint = _floatilla.GetWorldMidpoint();
+
+		Vector3 relativePosition = this.transform.position - floatillaMidpoint;
+		Vector3 relativePositionLocalSpace = this.transform.worldToLocalMatrix.MultiplyPoint(floatillaMidpoint);
 
 		if (relativePosition.magnitude > this.PreferredDistance)
-		{	
-			// The direction to face is the opposite of the thrusting direction!
-			Vector3 destinationLocalHeading = _thrustDirectionsByPower[0] * -1;
+		{
+			Vector3 destinationLocalHeading = _thrustDirectionsByPower[0];
 
 			AngleTowardOpponentInDirection(relativePositionLocalSpace, destinationLocalHeading);
 
@@ -129,18 +131,18 @@ public class PirateShipAIController : MonoBehaviour
 
 	private void RotateShip(float rotateDirection, float destinationAngle)
 	{
-		float rotateAngle = CalculateRotationAngleMagnitude(Time.deltaTime, destinationAngle) * rotateDirection;
+		float rotateAngle = CalculateRotationAngleMagnitude(destinationAngle) * rotateDirection;
 
 		this.ThrustControl.ApplyRotation(rotateAngle);
 	}
 
-	private float CalculateRotationAngleMagnitude(float deltaTime, float destinationAngle)
+	private float CalculateRotationAngleMagnitude(float destinationAngle)
 	{
 		float turnsPerSecond = Mathf.Max(
 			this.MaxDegreesPerSecondRotation - (this.TurnReductionPerHullPiece * this.Ship.GetHullCount()),
 			this.MinDegreesPerSecondRotation);
 
-		return Mathf.Min(destinationAngle, turnsPerSecond * deltaTime);
+		return Mathf.Min(destinationAngle, turnsPerSecond * Time.deltaTime);
 	}
 
 	private void BuildCannonOptions()
@@ -182,5 +184,13 @@ public class PirateShipAIController : MonoBehaviour
 			.Where(kvp => kvp.Value > 0.0f)
 			.Select(kvp => kvp.Key)
 			.ToList();
+	}
+
+	private void OnDrawGizmos()
+	{
+		Vector3 floatillaMidpoint = GameObject.FindObjectOfType<Floatilla>().GetWorldMidpoint();
+
+		Gizmos.color = Color.red;
+		Gizmos.DrawLine(this.transform.position, floatillaMidpoint);
 	}
 }

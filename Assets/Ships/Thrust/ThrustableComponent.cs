@@ -23,8 +23,9 @@ public class ThrustableComponent : MonoBehaviour
 		{
             this.RigidBody.angularVelocity = Vector3.zero;
 
+            this.transform.Rotate(Vector3.up * rotateAngle);
             //this.RigidBody.rotation = Quaternion.AngleAxis(rotateAngle, Vector3.up);
-            this.RigidBody.MoveRotation(this.RigidBody.rotation * Quaternion.AngleAxis(rotateAngle, Vector3.up));
+            //this.RigidBody.MoveRotation(this.RigidBody.rotation * Quaternion.AngleAxis(rotateAngle, Vector3.up));
         }
     }
 }

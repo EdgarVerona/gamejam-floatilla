@@ -6,7 +6,7 @@ using UnityEngine;
 public class FollowCamera : MonoBehaviour
 {
     [SerializeField]
-    Floatilla ObjectToFollow;
+    GameObject ObjectToFollow;
 
     Camera _camera;
 
@@ -19,13 +19,16 @@ public class FollowCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var objectMidpoint = ObjectToFollow.GetWorldMidpoint();
+        if (this.ObjectToFollow != null)
+		{
+            var objectMidpoint = this.ObjectToFollow.transform.position;
 
-        _camera.transform.SetPositionAndRotation(
-            new Vector3(
-                objectMidpoint.x,
-                _camera.transform.position.y,
-                objectMidpoint.z),
-            _camera.transform.rotation);
+            _camera.transform.SetPositionAndRotation(
+                new Vector3(
+                    objectMidpoint.x,
+                    _camera.transform.position.y,
+                    objectMidpoint.z),
+                _camera.transform.rotation);
+        }
     }
 }

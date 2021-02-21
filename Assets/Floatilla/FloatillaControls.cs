@@ -7,9 +7,6 @@ using UnityEngine.InputSystem;
 public class FloatillaControls : MonoBehaviour
 {
 	[SerializeField]
-	ThrustableComponent ThrustControl;
-
-	[SerializeField]
 	Floatilla FloatillaReference;
 
 	[SerializeField]
@@ -129,18 +126,18 @@ public class FloatillaControls : MonoBehaviour
 
 	private void ThrustShip()
 	{
-		Vector3 speedPerDirection = new Vector3(0.0f, 0.0f, 0.0f);
+		Vector3 speedPerDirection = Vector3.zero;
 
 		if (_thrustX != 0)
 		{
-			speedPerDirection.x = this.FloatillaReference.GetEngineThrust(_thrustX > 0 ? Vector3.left : Vector3.right);
+			speedPerDirection = speedPerDirection + (_thrustX > 0 ? Vector3.left : Vector3.right);
 		}
 		if (_thrustY != 0)
 		{
-			speedPerDirection.z = this.FloatillaReference.GetEngineThrust(_thrustY > 0 ? Vector3.forward : Vector3.back);
+			speedPerDirection = speedPerDirection + (_thrustY > 0 ? Vector3.forward : Vector3.back);
 		}
 
-		this.ThrustControl.ApplyThrust(new Vector3(_thrustX * speedPerDirection.x, 0.0f, _thrustY * speedPerDirection.z), 1);
+		this.FloatillaReference.ApplyThrust(speedPerDirection);
 	}
 
 	private void RotateShip()
@@ -152,19 +149,19 @@ public class FloatillaControls : MonoBehaviour
 			case 0:
 				break;
 			default:
-				rotateAngle = CalculateRotationAngleMagnitude(Time.deltaTime) * _rotateDirection;
+				rotateAngle = CalculateRotationAngleMagnitude() * _rotateDirection;
 				break;
 		}
 
-		this.ThrustControl.ApplyRotation(rotateAngle);
+		this.FloatillaReference.ApplyRotation(rotateAngle);
 	}
 
-	private float CalculateRotationAngleMagnitude(float deltaTime)
+	private float CalculateRotationAngleMagnitude()
 	{
 		float turnsPerSecond = Math.Max(
 			this.MaxDegreesPerSecondRotation - (this.TurnReductionPerHullPiece * this.FloatillaReference.GetHullCount()),
 			this.MinDegreesPerSecondRotation);
 
-		return turnsPerSecond * deltaTime;
+		return turnsPerSecond * Time.deltaTime;
 	}
 }

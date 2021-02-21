@@ -7,6 +7,9 @@ using UnityEngine;
 [RequireComponent(typeof(Health))]
 public class Ship : MonoBehaviour
 {
+    [SerializeField]
+    ThrustableComponent ThrustControl;
+
     private KeyedLists<Vector3, Engine> _engines;
     private KeyedLists<Vector3, Cannon> _cannons;
     private List<MooringPoint> _mooringPoints;
@@ -69,7 +72,28 @@ public class Ship : MonoBehaviour
         return result;
 	}
 
-    public void FireActiveCannons(Vector3 direction)
+	internal void ApplyRotation(float rotateAngle)
+	{
+        this.ThrustControl.ApplyRotation(rotateAngle);
+    }
+
+	internal void ApplyThrust(Vector3 direction)
+	{
+        Vector3 speedPerDirection = Vector3.zero;
+
+        if (direction.x != 0)
+        {
+            speedPerDirection.x = this.GetEngineThrust(direction.x > 0 ? Vector3.left : Vector3.right);
+        }
+        if (direction.z != 0)
+        {
+            speedPerDirection.z = this.GetEngineThrust(direction.z > 0 ? Vector3.forward : Vector3.back);
+        }
+
+        this.ThrustControl.ApplyThrust(new Vector3(direction.x * speedPerDirection.x, 0.0f, direction.z * speedPerDirection.z), 1);
+    }
+
+	public void FireActiveCannons(Vector3 direction)
 	{
         if (!_isDying)
 		{

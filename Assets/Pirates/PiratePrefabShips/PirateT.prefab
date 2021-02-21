@@ -53,6 +53,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 086d7da7c701786428f6bc878c075480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ThrustControl: {fileID: 4375668691511581564}
 --- !u!114 &5214209011770611696
 MonoBehaviour:
   m_ObjectHideFlags: 0
