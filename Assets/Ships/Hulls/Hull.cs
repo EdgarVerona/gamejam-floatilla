@@ -63,12 +63,6 @@ public class Hull : MonoBehaviour
 		}
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void InstantiateDevice(GameObject prefabDevice, Vector3 direction)
 	{
         if (prefabDevice != null)

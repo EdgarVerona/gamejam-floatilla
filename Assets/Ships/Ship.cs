@@ -177,6 +177,11 @@ public class Ship : MonoBehaviour
 
     void Update()
     {
+        if (PauseState.IsPaused)
+        {
+            return;
+        }
+
         if (_isDying)
 		{
             SendMessageUpwards("OnShipDeath", this, SendMessageOptions.DontRequireReceiver);

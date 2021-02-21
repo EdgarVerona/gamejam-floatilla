@@ -9,7 +9,7 @@ public class Floatilla : MonoBehaviour
     [SerializeField]
     GameState GameState;
 
-    private Vector3 _localCenterpoint;
+    private LazyValue<Bounds> _lastBounds;
 
     private List<Ship> _shipsInFloatilla = new List<Ship>();
 
@@ -18,15 +18,20 @@ public class Floatilla : MonoBehaviour
         return _shipsInFloatilla.Sum(ship => ship.GetHullCount());
     }
 
-    public void FireActiveCannons(Vector3 direction)
+    public void SetCannonFireStatuses(Dictionary<Vector3, bool> fireStatuses)
 	{
-        _shipsInFloatilla.ForEach(ship => ship.FireActiveCannons(direction));
+        foreach (var status in fireStatuses)
+		{
+            if (status.Value)
+			{
+                _shipsInFloatilla.ForEach(ship => ship.FireActiveCannons(status.Key));
+            }
+            else
+			{
+                _shipsInFloatilla.ForEach(ship => ship.StopActiveCannons(status.Key));
+            }
+        }
 	}
-
-    public void StopActiveCannons(Vector3 direction)
-	{
-        _shipsInFloatilla.ForEach(ship => ship.StopActiveCannons(direction));
-    }
 
     public void FireActiveCannonsAllDirections()
 	{
@@ -50,22 +55,22 @@ public class Floatilla : MonoBehaviour
 
     public Vector3 GetWorldMidpoint()
     {
-        return MathUtilities.GetMaxBoundsOfChildren(this.gameObject).center;
+        return _lastBounds?.GetValue().center ?? Vector3.zero;
+    }
+
+    public Bounds GetWorldBounds()
+	{
+        return _lastBounds?.GetValue() ?? new Bounds();
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        _lastBounds = new LazyValue<Bounds>(
+            1.0f,
+            (lastBoundValue) => MathUtilities.GetMaxBoundsOfChildren(this.gameObject));
+
         _shipsInFloatilla = this.GetComponentsInChildren<Ship>().ToList();
-
-        var bounds = MathUtilities.GetMaxBoundsOfChildren(this.gameObject);
-
-        _localCenterpoint = this.transform.worldToLocalMatrix.MultiplyPoint(bounds.center);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 
 	private void OnDrawGizmos()

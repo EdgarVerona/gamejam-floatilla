@@ -36,6 +36,11 @@ public class Cannon : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (PauseState.IsPaused)
+        {
+            return;
+        }
+
         if (_firing)
 		{
             // If time to fire again, do so.

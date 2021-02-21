@@ -32,7 +32,6 @@ public class HullGridEditor : MonoBehaviour
 		}
 	}
 
-
 	private void OnDrawGizmos()
 	{
 		if (EditorUtilities.IsEditMode())

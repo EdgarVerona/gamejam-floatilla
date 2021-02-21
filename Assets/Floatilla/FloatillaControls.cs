@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,12 +23,81 @@ public class FloatillaControls : MonoBehaviour
 	private int _thrustX = 0;
 	private int _thrustY = 0;
 
+	private LazyValue<InteractableComponent> _candidateInteractable = null;
+
+	private Dictionary<Vector3, bool> _fireStatuses = new Dictionary<Vector3, bool>()
+	{
+		{ Vector3.forward, false },
+		{ Vector3.back, false },
+		{ Vector3.left, false },
+		{ Vector3.right, false }
+	};
+
 	public void Start()
 	{
+		_candidateInteractable = new LazyValue<InteractableComponent>(
+			1.0f,
+			UpdateCandidateInteractable);
+	}
+
+	public void OnDirectionalFire(InputAction.CallbackContext context)
+	{
+		if (PauseState.IsPaused)
+		{
+			return;
+		}
+
+		var moveDirection = context.ReadValue<Vector2>();
+
+		if (moveDirection.x > Mathf.Epsilon)
+		{
+			_fireStatuses[Vector3.right] = true;
+			_fireStatuses[Vector3.left] = false;
+		}
+		else if (moveDirection.x < -Mathf.Epsilon)
+		{
+			_fireStatuses[Vector3.right] = false;
+			_fireStatuses[Vector3.left] = true;
+		}
+		else
+		{
+			_fireStatuses[Vector3.right] = false;
+			_fireStatuses[Vector3.left] = false;
+		}
+
+		if (moveDirection.y > Mathf.Epsilon)
+		{
+			_fireStatuses[Vector3.forward] = true;
+			_fireStatuses[Vector3.back] = false;
+		}
+		else if (moveDirection.y < -Mathf.Epsilon)
+		{
+			_fireStatuses[Vector3.forward] = false;
+			_fireStatuses[Vector3.back] = true;
+		}
+		else
+		{
+			_fireStatuses[Vector3.forward] = false;
+			_fireStatuses[Vector3.back] = false;
+		}
+	}
+
+	public void OnInteract(InputAction.CallbackContext context)
+	{
+		var currentInteractable = _candidateInteractable?.GetValue();
+		if (currentInteractable != null)
+		{
+			currentInteractable.Interact();
+		}
 	}
 
 	public void OnMove(InputAction.CallbackContext context)
 	{
+		if (PauseState.IsPaused)
+		{
+			return;
+		}
+
 		var moveDirection = context.ReadValue<Vector2>();
 
 		if (moveDirection.x > Mathf.Epsilon)
@@ -63,6 +133,11 @@ public class FloatillaControls : MonoBehaviour
 
 	public void OnFire(InputAction.CallbackContext context)
 	{
+		if (PauseState.IsPaused)
+		{
+			return;
+		}
+
 		if (context.performed)
 		{
 			this.FloatillaReference.FireActiveCannonsAllDirections();
@@ -75,6 +150,11 @@ public class FloatillaControls : MonoBehaviour
 
 	public void OnRotateLeft(InputAction.CallbackContext context)
 	{
+		if (PauseState.IsPaused)
+		{
+			return;
+		}
+
 		if (context.started)
 		{
 			print("Rotating Left!");
@@ -92,6 +172,11 @@ public class FloatillaControls : MonoBehaviour
 
 	public void OnRotateRight(InputAction.CallbackContext context)
 	{
+		if (PauseState.IsPaused)
+		{
+			return;
+		}
+
 		if (context.started)
 		{
 			print("Rotating Right!");
@@ -120,8 +205,58 @@ public class FloatillaControls : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
 	{
+		// Calling GetValue will force an update about the nearest interactable if needed
+		_candidateInteractable?.GetValue();
+
 		RotateShip();
 		ThrustShip();
+		FireDirections();
+	}
+
+	private InteractableComponent UpdateCandidateInteractable(InteractableComponent lastChosen)
+	{
+		InteractableComponent result = null;
+		bool resultFound = false;
+
+		foreach (var interactable in InteractableRegistry.ActiveInteractables)
+		{
+			if (interactable != null)
+			{
+				var closestPointToInteractable = this.FloatillaReference.GetWorldBounds().ClosestPoint(interactable.transform.position);
+
+				// Find the first interactable that is within use range, and use it.
+				// And then stop looking for others.
+				if (Vector3.Distance(interactable.transform.position, closestPointToInteractable) <= interactable.MinimumDistanceToInteract)
+				{
+					resultFound = true;
+
+					if (interactable != lastChosen)
+					{
+						// Force the old candidate to no longer be.
+						lastChosen?.EndInteractivity();
+
+						// Set up the new candidate.
+						result = interactable;
+						interactable.StartInteractivity();
+					}
+
+					// Either way, stop looking for new candidates.  We found one that's close enough.
+					break;
+				}
+			}
+		}
+
+		if (!resultFound)
+		{
+			lastChosen?.EndInteractivity();
+		}
+
+		return result;
+	}
+
+	private void FireDirections()
+	{
+		this.FloatillaReference.SetCannonFireStatuses(_fireStatuses);
 	}
 
 	private void ThrustShip()
