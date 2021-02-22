@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class FloatillaControls : MonoBehaviour
 {
@@ -199,7 +200,11 @@ public class FloatillaControls : MonoBehaviour
 
 	public void OnBoatManagement(InputAction.CallbackContext context)
 	{
-		print("Boat Management Screen");
+		if (context.performed)
+		{
+			print("Boat Management Screen");
+			BoatManagementLoader.LoadBoatManagementScreen(this.FloatillaReference, this);
+		}
 	}
 
     // Update is called once per frame

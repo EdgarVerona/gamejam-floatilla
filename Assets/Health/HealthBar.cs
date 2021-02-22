@@ -56,6 +56,6 @@ public class HealthBar : MonoBehaviour
 	{
 		// Screen point for the person's health bar, and a configured offset above it.
 		// Note that _health is attached to the object in the game that has health.
-		this.transform.position = _mainCamera.WorldToScreenPoint(_health.transform.position + Vector3.up * this.PositionOffset);
+		this.transform.position = _mainCamera.WorldToScreenPoint(_health.transform.position + Vector3.forward * this.PositionOffset);
 	}
 }
